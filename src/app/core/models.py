@@ -1,18 +1,18 @@
-from enum import Enum, auto
+from enum import Enum
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
 # Enum definitions
-class ColorEnum(Enum):
-    RED = auto()
-    ORANGE = auto()
-    YELLOW = auto()
-    GREEN = auto()
-    BLUE = auto()
-    INDIGO = auto()
-    VIOLET = auto()
+class ColorEnum(str, Enum):
+    RED = "RED"
+    ORANGE = "ORANGE"
+    YELLOW = "YELLOW"
+    GREEN = "GREEN"
+    BLUE = "BLUE"
+    INDIGO = "INDIGO"
+    VIOLET = "VIOLET"
 
 
 # Payload models
