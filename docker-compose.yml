@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  ballball-cs:
+    image: ballball-cs
+    container_name: ballball-cs
+    env_file: local.env
+    build:
+      context: .
+      # target: dev-security
+      # target: dev-coverage
+      # target: dev-linter
+    volumes:
+      - ./src/app:/app/app
+      - ./log:/data
+    ports:
+      - 8080:8080
+    command: /app/start-reload.sh
