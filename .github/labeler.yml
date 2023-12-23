@@ -1,0 +1,13 @@
+design:
+    - design/**
+dependencies:
+    - pyproject.toml
+    - poetry.lock
+    - Dockerfile
+document:
+    - docs/**
+    - src/app/history.json
+test:
+    - tests/**
+    - src/tests/**
+    - integration/**

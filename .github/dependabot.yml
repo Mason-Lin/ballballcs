@@ -1,0 +1,25 @@
+version: 2
+updates:
+    - package-ecosystem: "pip"
+      directory: "/"
+      insecure-external-code-execution: allow
+      schedule:
+          interval: "weekly"
+      commit-message:
+          prefix: ⬆
+
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      registries:
+          - submodule-github
+      schedule:
+          interval: "weekly"
+      commit-message:
+          prefix: 🤖
+
+    # - package-ecosystem: "docker"
+    #   directory: "/"
+    #   schedule:
+    #       interval: "weekly"
+    #   commit-message:
+    #       prefix: 🐳
