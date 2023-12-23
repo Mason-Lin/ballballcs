@@ -1,0 +1,134 @@
+[tool.poetry]
+name = "ballballcs"
+version = "0.1.0"
+description = "It's a CS-inspired top-down perspective shooter game with 2D ball characters and intense gameplay, and it lets users focus on tactical decisions."
+authors = ["Mason Lin <pizza0117@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = {extras = ["all"], version = "^0.105.0"}
+uvicorn = {extras = ["standard"], version = "^0.25.0"}
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+coverage = {extras = ["toml"], version = "^7.3.4"}
+pytest-asyncio = "^0.23.2"
+pytest-mock = "^3.12.0"
+pytest-xdist = "^3.5.0"
+pylama = {extras = ["pylint"], version = "^8.4.1"}
+black = "^23.12.1"
+pre-commit = "^3.6.0"
+pytest-cov = "^4.1.0"
+bandit = "^1.7.6"
+ruff = "^0.1.9"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -s -v --log-cli-level=DEBUG -p no:warnings --junitxml=junit.xml --strict-markers"
+asyncio_mode = "strict"
+norecursedirs = ["integration"]
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+omit = ["src/tests/*"]
+
+[tool.pylama]
+format = "pylint"
+skip = "*/.env/*,static/*"
+linters = "pylint"
+
+[tool.pylama.linter.pylint]
+max_line_length = 140
+disable = "C,R,W"
+extension-pkg-whitelist = "pydantic"
+
+[tool.codespell]
+builtin = "clear,rare,informal,code,names,en-GB_to_en-US"
+ignore-words-list = "master"
+quiet-level = 3
+skip = ".git,*.lock,htmlcov,log,*.yml,*.xml,*.csv"
+
+[tool.ruff]
+# https://beta.ruff.rs/docs/rules/
+extend-exclude = ["integration", "tests", "src/tests", "scripts"]
+# The following rules are currently not implemented by ruff, but we intend to ignore
+# "E203","W503","W0511","W0613","W0703","W0707","W1203",
+ignore = [
+  "B008",    # do not perform function calls in argument defaults
+  "B904",    # Within an except clause, raise exceptions with raise ... from err or raise ... from None to distinguish them from errors in exception handling
+  "C901",    # mccabe, too complex
+  "D1",      # missing public docstrings
+  "D203",    # 1 blank line required before class docstring
+  "D205",    # 1 blank line required between summary line and description
+  "D213",    # Multi-line docstring summary should start at the second line
+  "D400",    # First line should end with a period
+  "D401",    # (docstring imperative mood) Overly restrictive.
+  "D404",    # First word of the docstring should not be "This"
+  "D417",    # Missing argument descriptions in the docstring
+  "DTZ005",  # The use of `datetime.datetime.now()` without `tz` argument is not allowed
+  "E402",    # Module level import not at top of file
+  "E501",    # line too long, handled by black
+  'E722',    # (bare exception): There are many places where we want to catch a maximally generic exception.
+  "E731",    # Do not assign a lambda expression, use a def
+  "E741",    # ambiguous-variable-name
+  "EXE002",  # The file is executable but no shebang is present
+  "G001",    # logging-string-format Logging statement uses string.format()
+  "G002",    # logging-percent-format Logging statement uses %
+  "G003",    # logging-string-concat Logging statement uses +
+  "G004",    # logging-f-string Logging statement uses f-string
+  "ERA",     # eradicate, Found commented-out code
+  "PT023",   # Use `@pytest.mark.asyncio()` over `@pytest.mark.asyncio`
+  "PTH123",  # open() should be replaced by Path.open()
+  "PLR0911", # Too many return statements ({returns} > {max_returns})
+  "PLR0912", # Too many branches ({branches} > {max_branches})
+  "PLR0913", # Too many arguments to function call
+  "PGH003",  # Use specific rule codes when ignoring type issues
+  "PGH004",  # Use specific rule codes when using noqa
+  "RUF100",  # Unused `noqa` directive
+]
+select = [
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "D",   # pydocstyle
+  "DTZ", # flake8-datetimez
+  "EXE", # flake8-executable
+  "G",   # flake8-logging-format
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "I",   # isort
+  "ICN", # flake8-import-conventions
+  "ISC", # flake8-implicit-str-concat
+  "PGH", # pygrep-hooks
+  "PIE", # flake8-pie
+  "PLC", # Pylint Convention
+  "PLE", # Pylint Error
+  "PLR", # Pylint Refactor
+  "PLW", # Pylint Warning
+  "PT",  # flake8-pytest-style
+  "PTH", # flake8-use-pathlib
+  "PYI", # flake8-pyi
+  "Q",   # flake8-quotes
+  "RET", # flake8-return
+  "RSE", # flake8-raise
+  "RUF", # ruff
+  "S",   # flake8-bandit
+  "SIM", # flake8-simplify
+  "SLF", # flake8-self
+  "T10", # flake8-debugger
+  "T20", # flake8-print
+  "TID", # flake8-tidy-imports
+  "UP",  # pyupgrade
+  "W",   # pycodestyle warnings
+]
+line-length = 140
+show-source = true
+src = ["src", "/app"]
+target-version = "py39"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
