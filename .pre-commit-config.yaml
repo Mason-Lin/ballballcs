@@ -1,0 +1,37 @@
+repos:
+    - repo: "https://github.com/pre-commit/pre-commit-hooks"
+      rev: v4.5.0
+      hooks:
+          - id: detect-private-key
+          - id: check-toml
+          - id: check-yaml
+          - id: check-json
+          - id: pretty-format-json
+            args: [--autofix, --no-sort-keys, --indent=4]
+          - id: requirements-txt-fixer
+    - repo: https://github.com/asottile/pyupgrade
+      rev: v3.15.0
+      hooks:
+          - id: pyupgrade
+            args: [--py39-plus]
+    - repo: https://github.com/charliermarsh/ruff-pre-commit
+      rev: v0.1.8
+      hooks:
+          - id: ruff
+            args: [--fix, --show-fixes, --exit-non-zero-on-fix]
+    - repo: https://github.com/psf/black
+      rev: 23.12.0
+      hooks:
+          - id: black
+            args: [--line-length=140]
+    - repo: https://github.com/codespell-project/codespell
+      rev: v2.2.6
+      hooks:
+          - id: codespell
+            name: codespell
+            description: Checks for common misspellings in python files.
+            entry: codespell
+            language: python
+            types: [file, python]
+            additional_dependencies:
+                - tomli
