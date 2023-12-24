@@ -4,7 +4,7 @@ I remember I played a small game in 2008. It is somewhat similar to CS but in to
 
 The character you control is a ball. It is a multiplayer online game and you can shoot each other.
 
-I can't seem to find this game now, and I don't remember the name. Anyway, I'll try to create a similar game
+I can't seem to find this game now, and I don't remember the name. Anyway, I'll try to create a similar game.
 
 # Game Description
 
