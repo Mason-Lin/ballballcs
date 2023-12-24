@@ -3,7 +3,21 @@ from sys import exit
 
 import pygame
 from fastapi import background
-from settings import *
+from settings import (
+    BULLET_LIFETIME,
+    BULLET_SCALE,
+    BULLET_SPEED,
+    FPS,
+    GUN_OFFSET_X,
+    GUN_OFFSET_Y,
+    HEIGHT,
+    PLAYER_SIZE,
+    PLAYER_SPEED,
+    PLAYER_START_X,
+    PLAYER_START_Y,
+    SHOOT_COOLDOWN,
+    WIDTH,
+)
 
 pygame.init()
 
@@ -138,4 +152,18 @@ while True:
     pygame.draw.rect(screen, "yellow", player.rect, width=2)
 
     pygame.display.update()
+    tick = clock.tick(FPS)
+    screen.blit(background, (0, 0))
+
+    all_sprites_group.draw(screen)
+    all_sprites_group.update()
+    # screen.blit(player.image, player.rect)
+    # player.update()
+
+    pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
+    pygame.draw.rect(screen, "yellow", player.rect, width=2)
+
+    pygame.display.update()
+    tick = clock.tick(FPS)
+    tick = clock.tick(FPS)
     tick = clock.tick(FPS)
