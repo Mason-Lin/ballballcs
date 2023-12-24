@@ -148,25 +148,9 @@ while True:
 
     all_sprites_group.draw(screen)
     all_sprites_group.update()
-    # screen.blit(player.image, player.rect)
-    # player.update()
 
-    pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
-    pygame.draw.rect(screen, "yellow", player.rect, width=2)
+    # pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
+    # pygame.draw.rect(screen, "yellow", player.rect, width=2)
 
     pygame.display.update()
-    tick = clock.tick(FPS)
-    screen.blit(background, (0, 0))
-
-    all_sprites_group.draw(screen)
-    all_sprites_group.update()
-    # screen.blit(player.image, player.rect)
-    # player.update()
-
-    pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
-    pygame.draw.rect(screen, "yellow", player.rect, width=2)
-
-    pygame.display.update()
-    tick = clock.tick(FPS)
-    tick = clock.tick(FPS)
     tick = clock.tick(FPS)
