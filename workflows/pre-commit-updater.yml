@@ -1,0 +1,11 @@
+name: Pre-commit Updater
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * 0"
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-pre-commit-updater.yml@master
+        secrets: inherit
