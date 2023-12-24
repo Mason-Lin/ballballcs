@@ -1,0 +1,11 @@
+# Try /jarvis help
+name: Talk to jarvis
+
+on:
+    issue_comment:
+        types: [created]
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-chatbot-jarvis.yml@master
+        secrets: inherit
