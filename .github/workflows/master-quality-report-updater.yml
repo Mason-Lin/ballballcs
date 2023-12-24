@@ -1,0 +1,13 @@
+name: Update Quality Report On README
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [master]
+    schedule:
+        - cron: "0 0 1 * *" # each 1st day of the month
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-quality-report-updater.yml.yml@master
+        secrets: inherit

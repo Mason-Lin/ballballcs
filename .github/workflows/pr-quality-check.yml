@@ -1,0 +1,10 @@
+name: Quality Check On PR
+
+on:
+    pull_request:
+        branches: [master]
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-pr-quality-check.yml@master
+        secrets: inherit
