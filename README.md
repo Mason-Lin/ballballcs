@@ -1,3 +1,5 @@
+![BallBall CS](docs/ballballcs.gif)
+
 # BallBall CS (a.k.a 球球 CS)
 
 I remember I played a small game in 2008. It is somewhat similar to CS but in top-down perspective.
