@@ -1,8 +1,7 @@
 import math
-from sys import exit
+import sys
 
 import pygame
-from fastapi import background
 from settings import (
     BULLET_LIFETIME,
     BULLET_SCALE,
@@ -140,7 +139,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            exit()
+            sys.exit()
     screen.blit(background, (0, 0))
 
     all_sprites_group.draw(screen)

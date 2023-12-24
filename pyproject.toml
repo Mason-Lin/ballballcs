@@ -45,7 +45,7 @@ linters = "pylint"
 [tool.pylama.linter.pylint]
 max_line_length = 140
 disable = "C,R,W"
-extension-pkg-whitelist = "pydantic"
+extension-pkg-whitelist = "pydantic,pygame"
 
 [tool.codespell]
 builtin = "clear,rare,informal,code,names,en-GB_to_en-US"
