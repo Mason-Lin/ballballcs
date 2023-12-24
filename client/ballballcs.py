@@ -96,6 +96,8 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = BULLET_SPEED
         self.x_vel = math.cos(self.angle * (2 * math.pi / 360)) * self.speed
         self.y_vel = math.sin(self.angle * (2 * math.pi / 360)) * self.speed
+        self.bullet_lifetime = BULLET_LIFETIME
+        self.spawn_time = pygame.time.get_ticks()
 
     def bullet_movement(self):
         self.x += self.x_vel
@@ -103,6 +105,9 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect.x = int(self.x)
         self.rect.y = int(self.y)
+
+        if pygame.time.get_ticks() - self.spawn_time > self.bullet_lifetime:
+            self.kill()
 
     def update(self):
         self.bullet_movement()
