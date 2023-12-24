@@ -1,0 +1,14 @@
+name: Enable Auto-merge Dependabot PR
+
+on:
+    pull_request:
+        branches: [master]
+
+permissions:
+    pull-requests: write
+    contents: write
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-enable-auto-merge-dependabot.yml@master
+        secrets: inherit
