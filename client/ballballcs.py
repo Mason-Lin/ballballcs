@@ -27,6 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = PLAYER_SPEED
         self.shoot = False
         self.shoot_cooldown = 0
+        self.gun_barrel_offset = pygame.math.Vector2(GUN_OFFSET_X, GUN_OFFSET_Y)
 
     def player_rotation(self):
         self.mouse_coords = pygame.mouse.get_pos()
@@ -64,7 +65,7 @@ class Player(pygame.sprite.Sprite):
     def is_shooting(self):
         if self.shoot_cooldown == 0:
             self.shoot_cooldown = SHOOT_COOLDOWN
-            spawn_bullet_pos = self.pos
+            spawn_bullet_pos = self.pos + self.gun_barrel_offset.rotate(self.angle)
             self.bullet = Bullet(spawn_bullet_pos[0], spawn_bullet_pos[1], self.angle)
             bullet_group.add(self.bullet)
             all_sprites_group.add(self.bullet)
