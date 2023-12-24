@@ -1,0 +1,12 @@
+name: Sprint Release
+
+on:
+    push:
+        tags:
+            - "itg-*"
+            - "v*.*.*"
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-release.yml@master
+        secrets: inherit
