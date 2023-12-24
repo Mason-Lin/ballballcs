@@ -1,0 +1,11 @@
+name: PR Code Fixer
+
+on:
+    pull_request:
+        branches: [master]
+        types: [opened, edited, synchronize, reopened]
+
+jobs:
+    reuse:
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-code-fixer-linter.yml@master
+        secrets: inherit
