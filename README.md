@@ -1,6 +1,6 @@
 # BallBall CS (球球 CS)
 
-I remember I played a small game in 2008. It is somewhat similar to CS but in tow down view.
+I remember I played a small game in 2008. It is somewhat similar to CS but in top-down perspective.
 
 The character you control is a ball. It is a multiplayer online game and you can shoot each other.
 
