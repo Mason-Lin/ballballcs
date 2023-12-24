@@ -17,6 +17,6 @@ class ColorEnum(str, Enum):
 
 # Payload models
 class Player(BaseModel):
-    name: str = Field(f"player_{uuid4()}", alias="User Name")
+    name: str = Field("player_{}".format(uuid4()), alias="User Name")
     color: ColorEnum = ColorEnum.RED
     model_config = ConfigDict(populate_by_name=True, extra="allow")
