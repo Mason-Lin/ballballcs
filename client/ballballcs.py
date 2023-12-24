@@ -17,9 +17,9 @@ background = pygame.transform.scale(pygame.image.load("background/background.jpg
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, player_start_x, player_start_y):
         super().__init__()
-        self.pos = pygame.math.Vector2(PLAYER_START_X, PLAYER_START_Y)
+        self.pos = pygame.math.Vector2(player_start_x, player_start_y)
         self.image = pygame.transform.rotozoom(pygame.image.load("player/player.png").convert_alpha(), 0, PLAYER_SIZE)
         self.base_player_image = self.image
         self.hitbox_rect = self.base_player_image.get_rect(center=self.pos)
@@ -114,7 +114,7 @@ class Bullet(pygame.sprite.Sprite):
         self.bullet_movement()
 
 
-player = Player()
+player = Player(PLAYER_START_X, PLAYER_START_Y)
 
 all_sprites_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
