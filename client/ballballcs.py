@@ -1,5 +1,6 @@
 import math
 import sys
+from pathlib import Path
 
 import pygame
 from settings import (
@@ -18,6 +19,9 @@ from settings import (
     WIDTH,
 )
 
+# assets
+HERE = Path(__file__).parent.resolve()
+
 pygame.init()
 
 # Creating the window
@@ -26,14 +30,14 @@ pygame.display.set_caption("BallBallCS")
 clock = pygame.time.Clock()
 
 # Load Image
-background = pygame.transform.scale(pygame.image.load("background/background.jpg").convert(), (WIDTH, HEIGHT))
+background = pygame.transform.scale(pygame.image.load(HERE / "background" / "background.jpg").convert(), (WIDTH, HEIGHT))
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, player_start_x, player_start_y):
         super().__init__()
         self.pos = pygame.math.Vector2(player_start_x, player_start_y)
-        self.image = pygame.transform.rotozoom(pygame.image.load("player/player.png").convert_alpha(), 0, PLAYER_SIZE)
+        self.image = pygame.transform.rotozoom(pygame.image.load(HERE / "player" / "player.png").convert_alpha(), 0, PLAYER_SIZE)
         self.base_player_image = self.image
         self.hitbox_rect = self.base_player_image.get_rect(center=self.pos)
         self.rect = self.hitbox_rect.copy()
@@ -100,7 +104,7 @@ class Player(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle):
         super().__init__()
-        self.image = pygame.image.load("bullet/small-red.png").convert_alpha()
+        self.image = pygame.image.load(HERE / "bullet" / "small-red.png").convert_alpha()
         self.image = pygame.transform.rotozoom(self.image, 0, BULLET_SCALE)
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
