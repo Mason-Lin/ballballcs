@@ -36,6 +36,7 @@ background = pygame.transform.scale(pygame.image.load(HERE / "background" / "bac
 class Player(pygame.sprite.Sprite):
     def __init__(self, player_start_x, player_start_y):
         super().__init__()
+        self.boundary = pygame.math.Vector2(WIDTH, HEIGHT)
         self.pos = pygame.math.Vector2(player_start_x, player_start_y)
         self.image = pygame.transform.rotozoom(pygame.image.load(HERE / "player" / "player.png").convert_alpha(), 0, PLAYER_SIZE)
         self.base_player_image = self.image
@@ -60,13 +61,13 @@ class Player(pygame.sprite.Sprite):
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w]:
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
             self.velocity_y = -self.speed
-        if keys[pygame.K_s]:
+        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             self.velocity_y = self.speed
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.velocity_x = self.speed
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             self.velocity_x = -self.speed
 
         if self.velocity_x != 0 and self.velocity_y != 0:
@@ -88,7 +89,17 @@ class Player(pygame.sprite.Sprite):
             all_sprites_group.add(self.bullet)
 
     def move(self):
-        self.pos += pygame.math.Vector2(self.velocity_x, self.velocity_y)
+        new_pos = self.pos + pygame.math.Vector2(self.velocity_x, self.velocity_y)
+        if new_pos.x - self.hitbox_rect.width // 2 < 0:
+            return
+        if new_pos.x + self.hitbox_rect.width // 2 > self.boundary.x:
+            return
+        if new_pos.y - self.hitbox_rect.height // 2 < 0:
+            return
+        if new_pos.y + self.hitbox_rect.height // 2 > self.boundary.y:
+            return
+
+        self.pos = new_pos
         self.hitbox_rect.center = self.pos
         self.rect.center = self.hitbox_rect.center
 
@@ -140,12 +151,17 @@ all_sprites_group.add(player)
 
 while True:
     key = pygame.key.get_pressed()
+
+    if key[pygame.K_ESCAPE]:
+        pygame.quit()
+        sys.exit()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    screen.blit(background, (0, 0))
 
+    screen.blit(background, (0, 0))
     all_sprites_group.draw(screen)
     all_sprites_group.update()
 
