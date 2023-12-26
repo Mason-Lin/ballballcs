@@ -1,4 +1,4 @@
-![BallBall CS](docs/ballballcs.gif)
+![BallBall CS](docs/ballballcs-20231227.gif)
 
 # BallBall CS (a.k.a 球球 CS)
 
@@ -21,3 +21,13 @@ After completion, change it to a client-server architecture. The server is respo
 # Game Description
 
 BallBall CS is an exhilarating 2D top-down perspective game inspired by Counter-Strike (CS) but with a unique twist. In this game, players take control of ball characters. The minimalist yet visually engaging design enhances the focus on intense gameplay and tactical decision-making.
+
+# Update history
+
+## 2023/12/27
+
+![BallBall CS](docs/ballballcs-20231227.gif)
+
+## 2023/12/24
+
+![BallBall CS](docs/ballballcs-20231224.gif)
