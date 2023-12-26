@@ -7,6 +7,7 @@ from settings import (
     BULLET_LIFETIME,
     BULLET_SCALE,
     BULLET_SPEED,
+    ENEMY_SPEED,
     FPS,
     GUN_OFFSET_X,
     GUN_OFFSET_Y,
@@ -142,11 +143,54 @@ class Bullet(pygame.sprite.Sprite):
         self.bullet_movement()
 
 
-player = Player(PLAYER_START_X, PLAYER_START_Y)
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, position):
+        super().__init__(enemy_group, all_sprites_group)
+        self.image = pygame.image.load(HERE / "necromancer" / "hunt" / "0.png").convert_alpha()
+        self.image = pygame.transform.rotozoom(self.image, 0, 2)
 
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+
+        self.direction = pygame.math.Vector2()
+        self.velocity = pygame.math.Vector2()
+        self.speed = ENEMY_SPEED
+
+        self.position = pygame.math.Vector2(position)
+
+    def hunt_player(self):
+        player_vector = pygame.math.Vector2(player.hitbox_rect.center)
+        enemy_vector = pygame.math.Vector2(self.rect.center)
+        distance = self.get_vector_distance(player_vector, enemy_vector)
+
+        if distance > 0:
+            self.direction = (player_vector - enemy_vector).normalize()
+        else:
+            self.direction = pygame.math.Vector2()
+
+        self.velocity = self.direction * self.speed
+        self.position += self.velocity
+
+        self.rect.centerx = self.position.x
+        self.rect.centery = self.position.y
+
+    def get_vector_distance(self, vector_1, vector_2):
+        return (vector_1 - vector_2).magnitude()
+
+    def update(self):
+        self.hunt_player()
+
+
+# groups
 all_sprites_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 
+# sprites
+player = Player(PLAYER_START_X, PLAYER_START_Y)
+necromancer = Enemy((400, 400))
+
+# add sprites to groups
 all_sprites_group.add(player)
 
 while True:
