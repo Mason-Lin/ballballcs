@@ -26,26 +26,33 @@ HERE = Path(__file__).parent.resolve()
 pygame.init()
 
 # Creating the window
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("BallBallCS")
-clock = pygame.time.Clock()
+CLOCK = pygame.time.Clock()
 
 # Load Image
-background = pygame.transform.scale(pygame.image.load(HERE / "background" / "background.jpg").convert(), (WIDTH, HEIGHT))
+BACKGROUND = pygame.transform.scale(pygame.image.load(HERE / "background" / "background.jpg").convert(), (WIDTH, HEIGHT))
+BOUNDARY = pygame.math.Vector2(WIDTH, HEIGHT)
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, player_start_x, player_start_y):
+    def __init__(self, pos):
         super().__init__()
-        self.boundary = pygame.math.Vector2(WIDTH, HEIGHT)
-        self.pos = pygame.math.Vector2(player_start_x, player_start_y)
-        self.image = pygame.transform.rotozoom(pygame.image.load(HERE / "player" / "player.png").convert_alpha(), 0, PLAYER_SIZE)
+        self.image = pygame.image.load(HERE / "player" / "player.png").convert_alpha()
+        self.image = pygame.transform.rotozoom(self.image, 0, PLAYER_SIZE)
         self.base_player_image = self.image
-        self.hitbox_rect = self.base_player_image.get_rect(center=self.pos)
+
+        self.pos = pos
+        self.vec_pos = pygame.math.Vector2(pos)
+        self.hitbox_rect = self.base_player_image.get_rect(center=pos)
         self.rect = self.hitbox_rect.copy()
+
         self.speed = PLAYER_SPEED
         self.shoot = False
         self.shoot_cooldown = 0
+
+        self.health = 100
+
         self.gun_barrel_offset = pygame.math.Vector2(GUN_OFFSET_X, GUN_OFFSET_Y)
 
     def player_rotation(self):
@@ -93,11 +100,11 @@ class Player(pygame.sprite.Sprite):
         new_pos = self.pos + pygame.math.Vector2(self.velocity_x, self.velocity_y)
         if new_pos.x - self.hitbox_rect.width // 2 < 0:
             return
-        if new_pos.x + self.hitbox_rect.width // 2 > self.boundary.x:
+        if new_pos.x + self.hitbox_rect.width // 2 > BOUNDARY.x:
             return
         if new_pos.y - self.hitbox_rect.height // 2 < 0:
             return
-        if new_pos.y + self.hitbox_rect.height // 2 > self.boundary.y:
+        if new_pos.y + self.hitbox_rect.height // 2 > BOUNDARY.y:
             return
 
         self.pos = new_pos
@@ -159,7 +166,7 @@ class Enemy(pygame.sprite.Sprite):
         self.position = pygame.math.Vector2(position)
 
     def hunt_player(self):
-        player_vector = pygame.math.Vector2(player.hitbox_rect.center)
+        player_vector = pygame.math.Vector2(PLAYER.hitbox_rect.center)
         enemy_vector = pygame.math.Vector2(self.rect.center)
         distance = self.get_vector_distance(player_vector, enemy_vector)
 
@@ -187,11 +194,11 @@ bullet_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 
 # sprites
-player = Player(PLAYER_START_X, PLAYER_START_Y)
-necromancer = Enemy((400, 400))
+PLAYER = Player((PLAYER_START_X, PLAYER_START_Y))
+NECROMANCER = Enemy((400, 400))
 
 # add sprites to groups
-all_sprites_group.add(player)
+all_sprites_group.add(PLAYER)
 
 while True:
     key = pygame.key.get_pressed()
@@ -205,12 +212,12 @@ while True:
             pygame.quit()
             sys.exit()
 
-    screen.blit(background, (0, 0))
-    all_sprites_group.draw(screen)
+    SCREEN.blit(BACKGROUND, (0, 0))
+    all_sprites_group.draw(SCREEN)
     all_sprites_group.update()
 
     # pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
     # pygame.draw.rect(screen, "yellow", player.rect, width=2)
 
     pygame.display.update()
-    tick = clock.tick(FPS)
+    tick = CLOCK.tick(FPS)
