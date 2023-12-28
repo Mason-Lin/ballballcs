@@ -1,10 +1,13 @@
+# flake8: noqa: E405
+# ruff: noqa: F405, F403
+# pylint: disable=wildcard-import, unused-wildcard-import, attribute-defined-outside-init
 import math
 import sys
 from pathlib import Path
 from typing import Union
 
 import pygame
-from settings import *  # noqa: F403
+from settings import *
 
 # assets
 HERE = Path(__file__).parent.resolve()

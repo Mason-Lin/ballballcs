@@ -11,6 +11,7 @@ python = "^3.9"
 fastapi = {extras = ["all"], version = "^0.105.0"}
 uvicorn = {extras = ["standard"], version = "^0.25.0"}
 httpx = "0.26.0"
+pygame = "^2.5.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
@@ -24,7 +25,6 @@ pre-commit = "^3.6.0"
 pytest-cov = "^4.1.0"
 bandit = "^1.7.6"
 ruff = "^0.1.9"
-pygame = "^2.5.2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
