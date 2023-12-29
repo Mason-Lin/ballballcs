@@ -1,11 +1,11 @@
 # flake8: noqa: E405
 # ruff: noqa: F405, F403
 # pylint: disable=wildcard-import, unused-wildcard-import, attribute-defined-outside-init
-
 import asyncio
 import logging
 import math
 import sys
+from collections import deque
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Union
@@ -14,6 +14,8 @@ import pygame
 from fastapi import FastAPI
 
 from app.game.settings import *
+
+RUNTIME_DATA = deque()
 
 # assets
 HERE = Path(__file__).parent.resolve()
@@ -259,6 +261,14 @@ player_group.add(OTHER_PLAYER)
 async def game_main_loop():
     while True:
         logging.debug("Game Running")
+
+        # DEBUG
+        logging.debug("=" * 50)
+        print(PLAYER.position)
+        if len(RUNTIME_DATA) > 0:
+            print(RUNTIME_DATA.popleft())
+        # DEBUG
+
         key = pygame.key.get_pressed()
 
         if key[pygame.K_ESCAPE]:
@@ -274,14 +284,14 @@ async def game_main_loop():
         all_sprites_group.draw(SCREEN)
         all_sprites_group.update()
 
-        print(PLAYER.position)
-        print(OTHER_PLAYER.position)
-
         # pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
         # pygame.draw.rect(screen, "yellow", player.rect, width=2)
 
         pygame.display.update()
         tick = CLOCK.tick(FPS)
+
+        # FIXME: Use sleep to let service work, should open a standalone process
+        await asyncio.sleep(0.25)
 
 
 @asynccontextmanager
