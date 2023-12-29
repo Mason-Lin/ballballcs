@@ -15,12 +15,13 @@ class ColorEnum(str, Enum):
     VIOLET = "VIOLET"
 
 
-class ControlPlayerEnum(str, Enum):
+class GameControlEnum(str, Enum):
     UP = "UP"
     DOWN = "DOWN"
     LEFT = "LEFT"
     RIGHT = "RIGHT"
     SHOOT = "SHOOT"
+    QUIT = "QUIT"
 
 
 # Payload models
@@ -30,6 +31,5 @@ class Player(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
 
-class ControlPlayer(BaseModel):
-    player: Player
-    action: ControlPlayerEnum
+class GameControl(BaseModel):
+    action: GameControlEnum

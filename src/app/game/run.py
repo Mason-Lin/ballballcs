@@ -68,26 +68,41 @@ class Player(pygame.sprite.Sprite):
         if self.who != "you":
             return
 
-        keys = pygame.key.get_pressed()
+        # TODO: key press
+        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0]["action"] in ("UP", "DOWN", "LEFT", "RIGHT", "SHOOT"):
+            control = RUNTIME_DATA.popleft()
+            if control["action"] == "UP":
+                self.velocity_y = -self.speed
+            elif control["action"] == "DOWN":
+                self.velocity_y = self.speed
+            elif control["action"] == "LEFT":
+                self.velocity_x = -self.speed
+            elif control["action"] == "RIGHT":
+                self.velocity_x = self.speed
+            else:
+                logging.warning(f"Unknown control: {control}")
 
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.velocity_y = -self.speed
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            self.velocity_y = self.speed
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            self.velocity_x = self.speed
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            self.velocity_x = -self.speed
+            # keys = pygame.key.get_pressed()
 
-        if self.velocity_x != 0 and self.velocity_y != 0:
-            self.velocity_x /= math.sqrt(2)
-            self.velocity_y /= math.sqrt(2)
+            # if keys[pygame.K_w] or keys[pygame.K_UP]:
+            #     self.velocity_y = -self.speed
+            # if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+            #     self.velocity_y = self.speed
+            # if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+            #     self.velocity_x = self.speed
+            # if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            #     self.velocity_x = -self.speed
 
-        if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
-            self.shoot = True
-            self.is_shooting()
-        else:
-            self.shoot = False
+            if self.velocity_x != 0 and self.velocity_y != 0:
+                self.velocity_x /= math.sqrt(2)
+                self.velocity_y /= math.sqrt(2)
+
+            # if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
+            if control["action"] == "SHOOT":
+                self.shoot = True
+                self.is_shooting()
+            else:
+                self.shoot = False
 
     def is_shooting(self):
         if self.shoot_cooldown == 0:
@@ -264,21 +279,25 @@ async def game_main_loop():
 
         # DEBUG
         logging.debug("=" * 50)
-        print(PLAYER.position)
+        logging.debug(PLAYER.position)
         if len(RUNTIME_DATA) > 0:
-            print(RUNTIME_DATA.popleft())
+            control = RUNTIME_DATA[0]
+            logging.debug(control)
         # DEBUG
 
-        key = pygame.key.get_pressed()
-
-        if key[pygame.K_ESCAPE]:
+        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0]["action"] == "QUIT":
             pygame.quit()
-            sys.exit()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        # key = pygame.key.get_pressed()
+
+        # if key[pygame.K_ESCAPE]:
+        #     pygame.quit()
+        #     sys.exit()
+
+        # for event in pygame.event.get():
+        #     if event.type == pygame.QUIT:
+        #         pygame.quit()
+        #         sys.exit()
 
         SCREEN.blit(BACKGROUND, (0, 0))
         all_sprites_group.draw(SCREEN)

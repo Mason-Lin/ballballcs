@@ -20,9 +20,7 @@ async def post_foo(player: models.Player):
 
 
 @router.post("/control")
-async def post_control(control: models.ControlPlayer):
-    logging.debug(f"player name: {control.player.name}, action: {control.action}")
-    if control.player.name == "test":
-        RUNTIME_DATA.append(control.model_dump())
-
+async def post_control(control: models.GameControl):
+    logging.debug(f"action: {control.action}")
+    RUNTIME_DATA.append(control.model_dump())
     return {"control": "done"}
