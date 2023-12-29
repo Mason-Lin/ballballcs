@@ -283,6 +283,7 @@ async def game_main_loop():
         if len(RUNTIME_DATA) > 0:
             control = RUNTIME_DATA[0]
             logging.debug(control)
+        logging.debug(f"health {OTHER_PLAYER.health=} {NECROMANCER.health=}")
         # DEBUG
 
         if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0]["action"] == "QUIT":
@@ -310,7 +311,7 @@ async def game_main_loop():
         tick = CLOCK.tick(FPS)
 
         # FIXME: Use sleep to let service work, should open a standalone process
-        await asyncio.sleep(0.25)
+        await asyncio.sleep(0.016)
 
 
 @asynccontextmanager

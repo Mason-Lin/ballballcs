@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from typing import Union
 
+import httpx
 import pygame
 from settings import *
 
@@ -62,20 +63,26 @@ class Player(pygame.sprite.Sprite):
 
         keys = pygame.key.get_pressed()
 
+        # TODO: test control server player
         if keys[pygame.K_w] or keys[pygame.K_UP]:
             self.velocity_y = -self.speed
+            httpx.post("http://localhost:8080/core/control", json={"action": "UP"})
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             self.velocity_y = self.speed
+            httpx.post("http://localhost:8080/core/control", json={"action": "DOWN"})
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.velocity_x = self.speed
+            httpx.post("http://localhost:8080/core/control", json={"action": "LEFT"})
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             self.velocity_x = -self.speed
+            httpx.post("http://localhost:8080/core/control", json={"action": "RIGHT"})
 
         if self.velocity_x != 0 and self.velocity_y != 0:
             self.velocity_x /= math.sqrt(2)
             self.velocity_y /= math.sqrt(2)
 
         if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
+            httpx.post("http://localhost:8080/core/control", json={"action": "SHOOT"})
             self.shoot = True
             self.is_shooting()
         else:
@@ -254,6 +261,7 @@ while True:
     key = pygame.key.get_pressed()
 
     if key[pygame.K_ESCAPE]:
+        httpx.post("http://localhost:8080/core/control", json={"action": "QUIT"})
         pygame.quit()
         sys.exit()
 
