@@ -10,19 +10,28 @@ I can't seem to find this game now, and I don't remember the name. Anyway, I'll 
 
 # Current progress:
 
-I used pygame to make a small game interface in the client folder. Currently, I am creating an offline game.
+> I used pygame to make a small game interface in the client folder. Currently, I am creating an offline game.
+> I plan to use the stand-alone version to make the basic structure first, such as collision, life system, item spawn system, two players, etc.
+> After completion, change it to a client-server architecture. The server is responsible for calculation, and the client side is only responsible for controlling and receiving the calculation results and presenting them.
 
-How to run the game: `poetry run python .\client\ballballcs.py`
+Client-Server version is available now.
 
-I plan to use the stand-alone version to make the basic structure first, such as collision, life system, item spawn system, two players, etc.
-
-After completion, change it to a client-server architecture. The server is responsible for calculation, and the client side is only responsible for controlling and receiving the calculation results and presenting them.
+-   How to run the game:
+    1. Run the Server `docker-compose up`
+    2. Run the Client `poetry run python .\client\ballballcs.py`
 
 # Game Description
 
 BallBall CS is an exhilarating 2D top-down perspective game inspired by Counter-Strike (CS) but with a unique twist. In this game, players take control of ball characters. The minimalist yet visually engaging design enhances the focus on intense gameplay and tactical decision-making.
 
 # Update history
+
+## 2023/12/30
+
+Able to run the game with client-server architecture
+
+![BallBall CS](docs/ballballcs-20231230-1.jpg)
+![BallBall CS](docs/ballballcs-20231230-2.jpg)
 
 ## 2023/12/27
 

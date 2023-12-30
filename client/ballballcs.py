@@ -3,6 +3,7 @@
 # pylint: disable=wildcard-import, unused-wildcard-import, attribute-defined-outside-init
 import math
 import sys
+import uuid
 from pathlib import Path
 from typing import Union
 
@@ -23,6 +24,28 @@ CLOCK = pygame.time.Clock()
 # Load Image
 BACKGROUND = pygame.transform.scale(pygame.image.load(HERE / "background" / "background.jpg").convert(), (WIDTH, HEIGHT))
 BOUNDARY = pygame.math.Vector2(WIDTH, HEIGHT)
+
+
+player = {"player": {"name": f"test-{uuid.uuid4().hex}"}}
+
+
+def sending_control():
+    # TODO: test control server player
+    keys = pygame.key.get_pressed()
+    key_pressed = [keys[idx] for idx in range(512)]
+    mouse_coords = pygame.mouse.get_pos()
+    mouse_pressed = pygame.mouse.get_pressed()
+
+    # FIXME: change to event base, not keep sending the data
+    httpx.post(
+        "http://localhost:8080/core/control",
+        json={
+            **player,
+            "key_pressed": key_pressed,
+            "mouse_coords": mouse_coords,
+            "mouse_pressed": mouse_pressed,
+        },
+    )
 
 
 class Player(pygame.sprite.Sprite):
@@ -65,24 +88,24 @@ class Player(pygame.sprite.Sprite):
 
         # TODO: test control server player
         if keys[pygame.K_w] or keys[pygame.K_UP]:
+            sending_control()
             self.velocity_y = -self.speed
-            httpx.post("http://localhost:8080/core/control", json={"action": "UP"})
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+            sending_control()
             self.velocity_y = self.speed
-            httpx.post("http://localhost:8080/core/control", json={"action": "DOWN"})
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            self.velocity_x = self.speed
-            httpx.post("http://localhost:8080/core/control", json={"action": "LEFT"})
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            sending_control()
             self.velocity_x = -self.speed
-            httpx.post("http://localhost:8080/core/control", json={"action": "RIGHT"})
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+            sending_control()
+            self.velocity_x = self.speed
 
         if self.velocity_x != 0 and self.velocity_y != 0:
             self.velocity_x /= math.sqrt(2)
             self.velocity_y /= math.sqrt(2)
 
         if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
-            httpx.post("http://localhost:8080/core/control", json={"action": "SHOOT"})
+            sending_control()
             self.shoot = True
             self.is_shooting()
         else:
@@ -258,10 +281,10 @@ player_group.add(OTHER_PLAYER)
 
 
 while True:
-    key = pygame.key.get_pressed()
+    keys = pygame.key.get_pressed()
 
-    if key[pygame.K_ESCAPE]:
-        httpx.post("http://localhost:8080/core/control", json={"action": "QUIT"})
+    if keys[pygame.K_ESCAPE]:
+        sending_control()
         pygame.quit()
         sys.exit()
 

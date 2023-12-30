@@ -6,6 +6,8 @@ from app.core import models
 from app.game.run import RUNTIME_DATA
 
 router = APIRouter()
+logger = logging.getLogger("uvicorn.access")
+logger.setLevel(logging.WARNING)
 
 
 @router.post("/join")
@@ -21,6 +23,6 @@ async def post_foo(player: models.Player):
 
 @router.post("/control")
 async def post_control(control: models.GameControl):
-    logging.debug(f"action: {control.action}")
-    RUNTIME_DATA.append(control.model_dump())
+    # logging.debug(f"player: {control.player.name}")
+    RUNTIME_DATA.append(control)
     return {"control": "done"}

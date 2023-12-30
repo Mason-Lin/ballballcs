@@ -4,7 +4,6 @@
 import asyncio
 import logging
 import math
-import sys
 from collections import deque
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -13,14 +12,13 @@ from typing import Union
 import pygame
 from fastapi import FastAPI
 
+from app.core import models
 from app.game.settings import *
 
-RUNTIME_DATA = deque()
+RUNTIME_DATA: deque[models.GameControl] = deque()
 
 # assets
 HERE = Path(__file__).parent.resolve()
-
-pygame.init()
 
 # Creating the window
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -53,8 +51,8 @@ class Player(pygame.sprite.Sprite):
 
         self.gun_barrel_offset = pygame.math.Vector2(GUN_OFFSET_X, GUN_OFFSET_Y)
 
-    def player_rotation(self):
-        self.mouse_coords = pygame.mouse.get_pos()
+    def player_rotation(self, mouse_coords):
+        self.mouse_coords = mouse_coords
         self.x_change_mouse_player = self.mouse_coords[0] - self.base_object_rect.centerx
         self.y_change_mouse_player = self.mouse_coords[1] - self.base_object_rect.centery
         self.angle = math.degrees(math.atan2(self.y_change_mouse_player, self.x_change_mouse_player))
@@ -69,40 +67,47 @@ class Player(pygame.sprite.Sprite):
             return
 
         # TODO: key press
-        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0]["action"] in ("UP", "DOWN", "LEFT", "RIGHT", "SHOOT"):
+        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0].key_pressed[pygame.K_w]:
+            logging.debug("W")
             control = RUNTIME_DATA.popleft()
-            if control["action"] == "UP":
-                self.velocity_y = -self.speed
-            elif control["action"] == "DOWN":
-                self.velocity_y = self.speed
-            elif control["action"] == "LEFT":
-                self.velocity_x = -self.speed
-            elif control["action"] == "RIGHT":
-                self.velocity_x = self.speed
-            else:
-                logging.warning(f"Unknown control: {control}")
+            self.velocity_y = -self.speed
+        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0].key_pressed[pygame.K_s]:
+            logging.debug("S")
+            control = RUNTIME_DATA.popleft()
+            self.velocity_y = self.speed
+        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0].key_pressed[pygame.K_a]:
+            logging.debug("A")
+            control = RUNTIME_DATA.popleft()
+            self.velocity_x = -self.speed
+        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0].key_pressed[pygame.K_d]:
+            logging.debug("D")
+            control = RUNTIME_DATA.popleft()
+            self.velocity_x = self.speed
 
-            # keys = pygame.key.get_pressed()
+        # keys = pygame.key.get_pressed()
 
-            # if keys[pygame.K_w] or keys[pygame.K_UP]:
-            #     self.velocity_y = -self.speed
-            # if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            #     self.velocity_y = self.speed
-            # if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            #     self.velocity_x = self.speed
-            # if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            #     self.velocity_x = -self.speed
+        # if keys[pygame.K_w] or keys[pygame.K_UP]:
+        #     self.velocity_y = -self.speed
+        # if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+        #     self.velocity_y = self.speed
+        # if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        #     self.velocity_x = -self.speed
+        # if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        #     self.velocity_x = self.speed
 
-            if self.velocity_x != 0 and self.velocity_y != 0:
-                self.velocity_x /= math.sqrt(2)
-                self.velocity_y /= math.sqrt(2)
+        if self.velocity_x != 0 and self.velocity_y != 0:
+            self.velocity_x /= math.sqrt(2)
+            self.velocity_y /= math.sqrt(2)
 
-            # if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
-            if control["action"] == "SHOOT":
-                self.shoot = True
-                self.is_shooting()
-            else:
-                self.shoot = False
+        # if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
+        if len(RUNTIME_DATA) > 0 and (RUNTIME_DATA[0].mouse_pressed == (True, False, False) or RUNTIME_DATA[0].key_pressed[pygame.K_SPACE]):
+            logging.debug("SHOOT")
+            control = RUNTIME_DATA.popleft()
+            self.player_rotation(control.mouse_coords)
+            self.shoot = True
+            self.is_shooting()
+        else:
+            self.shoot = False
 
     def is_shooting(self):
         if self.shoot_cooldown == 0:
@@ -151,7 +156,7 @@ class Player(pygame.sprite.Sprite):
 
         self.user_input()
         self.move()
-        self.player_rotation()
+        # self.player_rotation()
         self.check_alive()
 
         if self.shoot_cooldown > 0:
@@ -274,20 +279,18 @@ player_group.add(OTHER_PLAYER)
 
 
 async def game_main_loop():
+    counter = 0
     while True:
-        logging.debug("Game Running")
-
-        # DEBUG
-        logging.debug("=" * 50)
-        logging.debug(PLAYER.position)
-        if len(RUNTIME_DATA) > 0:
-            control = RUNTIME_DATA[0]
-            logging.debug(control)
-        logging.debug(f"health {OTHER_PLAYER.health=} {NECROMANCER.health=}")
-        # DEBUG
-
-        if len(RUNTIME_DATA) > 0 and RUNTIME_DATA[0]["action"] == "QUIT":
-            pygame.quit()
+        counter += 1
+        if counter % FPS == 0:
+            logging.debug("Game Running")
+            # DEBUG
+            logging.debug(PLAYER.position)
+            # if len(RUNTIME_DATA) > 0:
+            #     control = RUNTIME_DATA[-1]
+            #     logging.debug(f"DEMO {control.player.name} {control.mouse_coords}")
+            logging.debug(f"health {OTHER_PLAYER.health=} {NECROMANCER.health=}")
+            # debug
 
         # key = pygame.key.get_pressed()
 
@@ -306,7 +309,6 @@ async def game_main_loop():
 
         # pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
         # pygame.draw.rect(screen, "yellow", player.rect, width=2)
-
         pygame.display.update()
         tick = CLOCK.tick(FPS)
 
@@ -316,6 +318,8 @@ async def game_main_loop():
 
 @asynccontextmanager
 async def game_main(app: FastAPI):
+    pygame.init()
     task = asyncio.create_task(game_main_loop())
     yield
+    pygame.quit()
     task.cancel()

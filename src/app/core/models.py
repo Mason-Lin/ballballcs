@@ -15,15 +15,6 @@ class ColorEnum(str, Enum):
     VIOLET = "VIOLET"
 
 
-class GameControlEnum(str, Enum):
-    UP = "UP"
-    DOWN = "DOWN"
-    LEFT = "LEFT"
-    RIGHT = "RIGHT"
-    SHOOT = "SHOOT"
-    QUIT = "QUIT"
-
-
 # Payload models
 class Player(BaseModel):
     name: str = Field(f"player_{uuid4()}", alias="User Name")
@@ -32,4 +23,7 @@ class Player(BaseModel):
 
 
 class GameControl(BaseModel):
-    action: GameControlEnum
+    player: Player
+    key_pressed: list[bool]
+    mouse_coords: tuple[int, int]
+    mouse_pressed: tuple[bool, bool, bool]
