@@ -49,7 +49,7 @@ extension-pkg-whitelist = "pydantic,pygame"
 
 [tool.codespell]
 builtin = "clear,rare,informal,code,names,en-GB_to_en-US"
-ignore-words-list = "master"
+ignore-words-list = "master,dequeue"
 quiet-level = 3
 skip = ".git,*.lock,htmlcov,log,*.yml,*.xml,*.csv"
 
