@@ -9,5 +9,5 @@ on:
 
 jobs:
     reuse:
-        uses: Mason-Lin/reusable-workflows/.github/workflows/template-quality-report-updater.yml.yml@master
+        uses: Mason-Lin/reusable-workflows/.github/workflows/template-quality-report-updater.yml@master
         secrets: inherit
