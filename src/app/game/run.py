@@ -310,7 +310,7 @@ async def game_main_loop():
         # pygame.draw.rect(screen, "red", player.hitbox_rect, width=2)
         # pygame.draw.rect(screen, "yellow", player.rect, width=2)
         pygame.display.update()
-        tick = CLOCK.tick(FPS)
+        _tick = CLOCK.tick(FPS)
 
         # FIXME: Use sleep to let service work, should open a standalone process
         await asyncio.sleep(0.016)
